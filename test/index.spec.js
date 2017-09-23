@@ -41,8 +41,8 @@ describe('BitMap', () => {
       expect(bitMap1.and(bitMap2).get()).toEqual([1, 64]);
     });
   });
-  describe('and', () => {
-    it('Should and login currectly', () => {
+  describe('xor', () => {
+    it('Should xor login currectly', () => {
       const bitMap1 = new BitMap();
       bitMap1.set(1, 129, 64, 200000);
       const bitMap2 = new BitMap();
