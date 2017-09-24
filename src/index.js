@@ -1,10 +1,11 @@
 import 'babel-polyfill';
 
 class BitMap {
-  constructor() {
+  constructor(...data) {
     const buffer = new ArrayBuffer(32);
     this.bitMap = new Uint32Array(buffer);
     this.bitMap[0] = 6;
+    this.set(...data);
   }
   set(...data) {
     const sortedData = [...data].sort((a, b) => a - b);
@@ -231,7 +232,7 @@ class BitMap {
         upperBound2 += this._getUpperBound(runningLength2, bitMap[j]);
         i += offset;
         j += offset;
-        if(!isAllZero) {
+        if(result[k + 1] === 0 || !isAllZero) {
           upperBound += this._getUpperBound(result[k + 1], result[k]);
           k += offset;
         }

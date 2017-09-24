@@ -25,28 +25,22 @@ describe('BitMap', () => {
   });
   describe('or', () => {
     it('Should or login currectly', () => {
-      const bitMap1 = new BitMap();
-      bitMap1.set(1, 129, 64, 200000);
-      const bitMap2 = new BitMap();
-      bitMap2.set(1, 4, 64, 400000, 400003);
+      const bitMap1 = new BitMap(1, 129, 64, 200000);
+      const bitMap2 = new BitMap(1, 4, 64, 400000, 400003);
       expect(bitMap1.or(bitMap2).get()).toEqual([1, 4, 64, 129, 200000, 400000, 400003]);
     });
   });
   describe('and', () => {
     it('Should and login currectly', () => {
-      const bitMap1 = new BitMap();
-      bitMap1.set(1, 129, 64, 200000);
-      const bitMap2 = new BitMap();
-      bitMap2.set(1, 4, 64, 400000, 400003);
+      const bitMap1 = new BitMap(1, 129, 64, 200000);
+      const bitMap2 = new BitMap(1, 4, 64, 400000, 400003);
       expect(bitMap1.and(bitMap2).get()).toEqual([1, 64]);
     });
   });
   describe('xor', () => {
     it('Should xor login currectly', () => {
-      const bitMap1 = new BitMap();
-      bitMap1.set(1, 129, 64, 200000);
-      const bitMap2 = new BitMap();
-      bitMap2.set(1, 4, 64, 400000, 400003, 129, 200000);
+      const bitMap1 = new BitMap(1, 129, 64, 200000);
+      const bitMap2 = new BitMap(1, 4, 64, 400000, 400003, 129, 200000);
       expect(bitMap1.xor(bitMap2).get()).toEqual([4, 400000, 400003]);
     });
   });
