@@ -13,8 +13,9 @@ class BitMap {
       this._set(value);
     });
   }
-  _getUpperBound(runningLength, wordLength) {
-    return ((runningLength + wordLength) << 5) - !runningLength;
+  _getUpperBound(index, bitMap) {
+    bitMap = bitMap || this.bitMap;
+    return ((bitMap[index + 1] + bitMap[index]) << 5) - !index;
   }
   _set(value) {
     if(
@@ -37,7 +38,7 @@ class BitMap {
       const runningLength = this.bitMap[i + 1];
       const wordLength = this.bitMap[i];
       const prevUpperBound = upperBound;
-      upperBound += this._getUpperBound(runningLength, wordLength);
+      upperBound += this._getUpperBound(i);
       if(value <= upperBound) {
         const index = (value - upperBound + (wordLength << 5)) >> 5;
         if(index >= 0) {
@@ -111,7 +112,7 @@ class BitMap {
     let upperBound = 0;
     const bitValue = 1 << (value % 64);
     for(let i = 0, len = this.bitMap.length; i < len;) {
-      upperBound += this._getUpperBound(this.bitMap[i + 1], this.bitMap[i]);
+      upperBound += this._getUpperBound(i);
       if(value <= upperBound) {
         const index = (value - upperBound + (this.bitMap[i] << 5)) >> 5;
         if(index >= 0) {
@@ -135,13 +136,13 @@ class BitMap {
     const len2 = bitMap.length;
     let upperBound = 0;
     for(let i = 0; i < len1;) {
-      upperBound += this._getUpperBound(this.bitMap[i + 1], this.bitMap[i]);
+      upperBound += this._getUpperBound(i);
       runningLengthSet.add(upperBound);
       i += this.bitMap[i] + 2;
     }
     upperBound = 0;
     for(let i = 0; i < len2;) {
-      upperBound += this._getUpperBound(bitMap[i + 1], bitMap[i]);
+      upperBound += this._getUpperBound(i, bitMap);
       if(runningLengthSet.has(upperBound)) {
         intersection.add(upperBound);
       }
@@ -153,7 +154,7 @@ class BitMap {
     let upperBound2 = 0;
     upperBound = 0;
     for(let i = 0, j = 0, k = 0; i < len1 && j < len2;) {
-      if(upperBound1 + this._getUpperBound(this.bitMap[i + 1], this.bitMap[i]) === upperBound2 + this._getUpperBound(bitMap[j + 1], bitMap[j])) {
+      if(upperBound1 + this._getUpperBound(i) === upperBound2 + this._getUpperBound(j, bitMap)) {
         const runningLength1 = this.bitMap[i + 1];
         const runningLength2 = bitMap[j + 1];
         const wordLength = bitMap[j];
@@ -164,13 +165,13 @@ class BitMap {
           result[k + offset] = bitMap[j + offset] & this.bitMap[i + offset];
           offset++;
         }
-        upperBound1 += this._getUpperBound(runningLength1, this.bitMap[i]);
-        upperBound2 += this._getUpperBound(runningLength2, bitMap[j]);
-        upperBound += this._getUpperBound(result[k + 1], result[k]);
+        upperBound1 += this._getUpperBound(i);
+        upperBound2 += this._getUpperBound(j, bitMap);
+        upperBound += this._getUpperBound(k, result);
         i += offset;
         j += offset;
         k += offset;
-      } else if(upperBound1 + this._getUpperBound(this.bitMap[i + 1], this.bitMap[i]) < upperBound2 + this._getUpperBound(bitMap[j + 1], bitMap[j])) {
+      } else if(upperBound1 + this._getUpperBound(i) < upperBound2 + this._getUpperBound(j, bitMap)) {
         i += this.bitMap[i] + 2;
       } else {
         j += bitMap[j] + 2;
@@ -187,13 +188,13 @@ class BitMap {
     const len2 = bitMap.length;
     let upperBound = 0;
     for(let i = 0; i < len1;) {
-      upperBound += this._getUpperBound(this.bitMap[i + 1], this.bitMap[i]);
+      upperBound += this._getUpperBound(i);
       runningLengthSet.add(upperBound);
       i += this.bitMap[i] + 2;
     }
     upperBound = 0;
     for(let i = 0; i < len2;) {
-      upperBound += this._getUpperBound(bitMap[i + 1], bitMap[i]);
+      upperBound += this._getUpperBound(i, bitMap);
       runningLengthSet.add(upperBound);
       i += bitMap[i] + 2;
     }
@@ -204,7 +205,7 @@ class BitMap {
     upperBound = 0;
     let k = 0;
     for(let i = 0, j = 0; i < len1 || j < len2;) {
-      if(i < len1 && j < len2 && upperBound1 + this._getUpperBound(this.bitMap[i + 1], this.bitMap[i]) === upperBound2 + this._getUpperBound(bitMap[j + 1], bitMap[j])) {
+      if(i < len1 && j < len2 && upperBound1 + this._getUpperBound(i) === upperBound2 + this._getUpperBound(j, bitMap)) {
         const runningLength1 = this.bitMap[i + 1];
         const runningLength2 = bitMap[j + 1];
         const wordLength = bitMap[j];
@@ -219,23 +220,23 @@ class BitMap {
           }
           offset++;
         }
-        upperBound1 += this._getUpperBound(runningLength1, this.bitMap[i]);
-        upperBound2 += this._getUpperBound(runningLength2, bitMap[j]);
+        upperBound1 += this._getUpperBound(i);
+        upperBound2 += this._getUpperBound(j, bitMap);
         i += offset;
         j += offset;
         if(result[k + 1] === 0 || !isAllZero) {
-          upperBound += this._getUpperBound(result[k + 1], result[k]);
+          upperBound += this._getUpperBound(k, result);
           k += offset;
         }
-      } else if(j >= len2 || (i < len1 && upperBound1 + this._getUpperBound(this.bitMap[i + 1], this.bitMap[i]) < upperBound2 + this._getUpperBound(bitMap[j + 1], bitMap[j]))) {
+      } else if(j >= len2 || (i < len1 && upperBound1 + this._getUpperBound(i) < upperBound2 + this._getUpperBound(j, bitMap))) {
         const runningLength1 = this.bitMap[i + 1];
         let offset = 0;
         for(let len = this.bitMap[i] + 2; offset < len; offset++) {
           result[k + offset] = this.bitMap[i + offset];
         }
         result[k + 1] = ((runningLength1 << 5) + upperBound1 - upperBound) >> 5;
-        upperBound1 += this._getUpperBound(runningLength1, this.bitMap[i]);
-        upperBound += this._getUpperBound(result[k + 1], result[k]);
+        upperBound1 += this._getUpperBound(i);
+        upperBound += this._getUpperBound(i, result);
         i += offset;
         k += offset;
       } else {
@@ -245,8 +246,8 @@ class BitMap {
           result[k + offset] = bitMap[j + offset];
         }
         result[k + 1] = ((runningLength2 << 5) + upperBound2 - upperBound) >> 5;
-        upperBound2 += this._getUpperBound(runningLength2, bitMap[j]);
-        upperBound += this._getUpperBound(result[k + 1], result[k]);
+        upperBound2 += this._getUpperBound(j, bitMap);
+        upperBound += this._getUpperBound(k, result);
         j += offset;
         k += offset;
       }
