@@ -34,8 +34,8 @@ describe('BitMap', () => {
       expect(bitMap.get()).toEqual([1, 4, 64, 129, 400000, 400003]);
     });
     it('Should insert currectly', () => {
-      bitMap.set(200000);
-      expect(bitMap.get()).toEqual([1, 4, 64, 129, 200000, 400000, 400003]);
+      bitMap.set(200032);
+      expect(bitMap.get()).toEqual([1, 4, 64, 129, 200032, 400000, 400003])
     });
   });
   describe('or', () => {
