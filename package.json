@@ -1,11 +1,11 @@
 {
   "name": "bitmap",
   "version": "0.0.1",
-  "description": "bitmap",
-  "main": "src/index.js",
+  "description": "Compact bitmap data structure, Memory efficient array of bool flags",
+  "main": "dist/index.js",
   "scripts": {
     "test": "NODE_ENV=test mocha --recursive --compilers js:babel-register ./test",
-    "build": "NODE_ENV=production babel index.js --out-file src/index.js"
+    "build": "NODE_ENV=production babel src/index.js --out-file dist/index.js"
   },
   "repository": {
     "type": "git",
