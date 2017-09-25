@@ -7,6 +7,21 @@ class BitMap {
     this.bitMap[0] = 6;
     this.set(...data);
   }
+  _validate(value) {
+    if(
+      typeof value !== 'number' ||
+      Number.isNaN(value) ||
+      !Number.isFinite(value) ||
+      value < 0 ||
+      ~~value !== value
+    ) {
+      if(typeof process === 'undefined' || process.env.NODE_ENV !== 'test') {
+        console.error('Value should be a native number');
+      }
+      return false;
+    }
+    return true;
+  }
   set(...data) {
     const sortedData = [...data].sort((a, b) => a - b);
     sortedData.forEach(value => {
@@ -18,16 +33,7 @@ class BitMap {
     return ((bitMap[index + 1] + bitMap[index]) << 5) - !index;
   }
   _set(value) {
-    if(
-      typeof value !== 'number' ||
-      Number.isNaN(value) ||
-      !Number.isFinite(value) ||
-      value < 0 ||
-      ~~value !== value
-    ) {
-      if(typeof process === 'undefined' || process.env.NODE_ENV !== 'test') {
-        console.error('Value should be a native number');
-      }
+    if(!this._validate(value)) {
       return;
     }
     let totalRunningLength = 0;
@@ -97,16 +103,7 @@ class BitMap {
     this.bitMap = removeBitMap.xor(this.or(removeBitMap)).bitMap;
   }
   includes(value) {
-    if(
-      typeof value !== 'number' ||
-      Number.isNaN(value) ||
-      !Number.isFinite(value) ||
-      value < 0 ||
-      ~~value !== value
-    ) {
-      if(typeof process === 'undefined' || process.env.NODE_ENV !== 'test') {
-        console.error('Value should be a native number');
-      }
+    if(!this._validate(value)) {
       return false;
     }
     let upperBound = 0;
