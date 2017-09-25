@@ -1,6 +1,6 @@
 {
   "name": "compact-bitmap",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Compact bitmap data structure, Memory efficient array of bool flags",
   "main": "dist/index.js",
   "scripts": {
