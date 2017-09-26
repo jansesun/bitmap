@@ -5,7 +5,7 @@ Compact bitmap data structure, Memory efficient array of bool flags
 ```javascript
 // init an empty bitMap
 const bitMap1 = new BitMap(); // []
-// init an bitMap with data
+// init a bitMap with data
 const bitMap2 = new BitMap(1, 2, 3, 5); // [1, 2, 3, 5]
 ```
 ### Add Data

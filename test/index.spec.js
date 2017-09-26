@@ -39,7 +39,7 @@ describe('BitMap', () => {
     });
   });
   describe('or', () => {
-    it('Should or login currectly', () => {
+    it('Should or logic currectly', () => {
       const bitMap1 = new BitMap(1, 129, 64, 200000);
       const bitMap2 = new BitMap(1, 4, 64, 400000, 400003);
       expect(bitMap1.or(bitMap2).get()).toEqual([1, 4, 64, 129, 200000, 400000, 400003]);
@@ -69,7 +69,7 @@ describe('BitMap', () => {
     });
   });
   describe('and', () => {
-    it('Should and login currectly', () => {
+    it('Should and logic currectly', () => {
       const bitMap1 = new BitMap(1, 129, 64, 200000);
       const bitMap2 = new BitMap(1, 4, 64, 400000, 400003);
       expect(bitMap1.and(bitMap2).get()).toEqual([1, 64]);
@@ -107,7 +107,7 @@ describe('BitMap', () => {
     });
   });
   describe('xor', () => {
-    it('Should xor login currectly', () => {
+    it('Should xor logic currectly', () => {
       const bitMap1 = new BitMap(1, 129, 64, 200000);
       const bitMap2 = new BitMap(1, 4, 64, 400000, 400003, 129, 200000);
       expect(bitMap1.xor(bitMap2).get()).toEqual([4, 400000, 400003]);
